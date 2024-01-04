@@ -100,7 +100,7 @@ app.post("/feed", async ({ req }) => {
       throw new Error("feedUrl required");
     }
     await kv.enqueue(payload);
-    denoLogger.info("inserted feed");
+    denoLogger.info(`Enqueued feed - ${payload.feedUrl}`);
     return new Response("", { status: 200 });
   } catch (error) {
     denoLogger.error(error.message);
@@ -123,17 +123,19 @@ app.get("/feed", async ({ req }) => {
   return new Response(JSON.stringify(feeds, null, 2));
 });
 
-// Fetch updates to feeds every hour
+// Fetch updates to feeds every 10 min
+// updating only those that haven't been updated since 1hr
 Deno.cron("refreshFeeds", "0/10 * * * *", async () => {
   denoLogger.info("Refreshing feeds");
   try {
     const feeds = await prisma.feed.findMany({
       where: {
         modified: {
-          gt: datetime(new Date()).subtract({ hours: 1 }).toISO()
+          gt: datetime().subtract({ hours: 1 }).toISO()
         }
       },
     });
+    denoLogger.info('Refresh results', feeds)
     if (!feeds.length) {
       denoLogger.info('No feeds to refresh')
       return
