@@ -1,0 +1,6 @@
+{
+  "tasks": {
+    "dev": "deno run -A --unstable --watch server.ts",
+    "db:generate": "deno run -A npm:prisma@^5.7.1 generate"
+  }
+}
