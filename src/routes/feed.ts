@@ -1,6 +1,6 @@
-import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify'
+import type { FastifyInstance, FastifyRequest, FastifyReply, FastifyPluginOptions } from 'fastify'
 
-export async function routes(fastify: FastifyInstance, _options) {
+export async function routes(fastify: FastifyInstance, _options: FastifyPluginOptions) {
   const feedBodySchema = {
     type: 'object',
     required: ['feedUrl', 'userId'],
@@ -19,6 +19,7 @@ export async function routes(fastify: FastifyInstance, _options) {
   });
 
   fastify.post("/feed", { schema }, async (request: FastifyRequest, _reply: FastifyReply) => {
+    // @ts-expect-error
     const { feedUrl, userId } = request.body;
     try {
       if (!feedUrl || !userId) {

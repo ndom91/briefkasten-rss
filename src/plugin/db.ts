@@ -1,6 +1,7 @@
-import { FastifyPluginCallback } from 'fastify'
 import { PrismaClient } from "@prisma/client";
 import fp from "fastify-plugin"
+import type { FastifyPluginCallback, FastifyInstance, FastifyPluginOptions, HookHandlerDoneFunction } from 'fastify'
+
 const prisma = new PrismaClient();
 
 declare module 'fastify' {
@@ -9,11 +10,11 @@ declare module 'fastify' {
   }
 }
 
-function prismaPlugin(fastify, options, done) {
+function prismaPlugin(fastify: FastifyInstance, _options: FastifyPluginOptions, done: HookHandlerDoneFunction) {
   if (!fastify.prisma) {
     fastify.decorate("prisma", prisma);
 
-    fastify.addHook("onClose", async (fastify, done) => {
+    fastify.addHook("onClose", async () => {
       if (fastify.prisma === prisma) {
         await prisma.$disconnect();
       }

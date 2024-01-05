@@ -2,7 +2,15 @@ import { Cron } from "croner";
 import { prisma } from "../plugin/db"
 import Parser from 'rss-parser';
 
-const parser = new Parser();
+const parser = new Parser({
+  defaultRSS: 2.0,
+  customFields: {
+    feed: ['language', 'copyright'],
+    item: [
+      ['media:content', 'media', { keepArray: true }],
+    ],
+  }
+});
 
 // Run every 10 min
 export const updateJob = Cron(
@@ -13,7 +21,7 @@ export const updateJob = Cron(
     protect: true,
     interval: 60
   },
-  async (cron) => {
+  async (cron: Cron) => {
     console.log("Refreshing feeds")
     try {
       const oneHourAgo = new Date()
@@ -39,8 +47,6 @@ export const updateJob = Cron(
         const response = await fetch(feed.url)
         const xml = await response.text()
         const parsedFeed = await parser.parseString(xml)
-        console.log(parsedFeed.items[0])
-
         // @TODO: Actually diff and update the feed items
         // updateFeed(parsedFeed);
 
