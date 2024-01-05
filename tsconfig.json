@@ -6,7 +6,9 @@
     "lib": [
       "esnext"
     ],
-    "esModuleInterop": true
+    "target": "esnext",
+    "esModuleInterop": true,
+    "moduleResolution": "node"
   },
   "baseUrl": ".",
   "paths": {

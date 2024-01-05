@@ -10,7 +10,8 @@ export const updateJob = Cron(
   {
     timezone: 'Europe/London',
     name: 'refreshFeeds',
-    protect: true
+    protect: true,
+    interval: 60
   },
   async () => {
     console.log("Refreshing feeds")
@@ -38,7 +39,7 @@ export const updateJob = Cron(
       for (const feed of feeds) {
         const response = await fetch(feed.url)
         const xml = await response.text()
-        const parsedFeed = await parser.parseURL(xml)
+        const parsedFeed = await parser.parseString(xml)
         console.log(parsedFeed.entities[0])
         // updateFeed(parsedFeed);
 

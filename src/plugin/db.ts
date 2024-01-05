@@ -1,6 +1,13 @@
+import { FastifyPluginCallback } from 'fastify'
 import { PrismaClient } from "@prisma/client";
 import fp from "fastify-plugin"
 const prisma = new PrismaClient();
+
+declare module 'fastify' {
+  interface FastifyInstance {
+    prisma: PrismaClient;
+  }
+}
 
 function prismaPlugin(fastify, options, done) {
   if (!fastify.prisma) {
@@ -16,9 +23,9 @@ function prismaPlugin(fastify, options, done) {
   done();
 }
 
-const fastifyPrismaPlugin = fp(prismaPlugin, { name: "fastify-prisma" })
+export const fastifyPrisma: FastifyPluginCallback = fp(prismaPlugin, { name: "fastify-prisma" })
 
 export {
-  fastifyPrismaPlugin as prismaPlugin,
+  fastifyPrisma as default,
   prisma
 }

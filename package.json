@@ -2,7 +2,9 @@
   "name": "rest-express",
   "version": "1.0.0",
   "license": "MIT",
+  "type": "module",
   "scripts": {
+    "build": "tsc",
     "dev": "tsx src/index.ts",
     "db:studio": "pnpm dlx prisma studio",
     "db:generate": "pnpm dlx prisma generate"
