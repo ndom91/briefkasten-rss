@@ -18,7 +18,6 @@ export const updateJob = Cron(
     try {
       const oneHourAgo = new Date()
       oneHourAgo.setHours(oneHourAgo.getHours() - 1)
-      console.log("minimumLastRefresh", oneHourAgo)
       const feeds = await prisma.feed.findMany({
         where: {
           lastFetched: {
@@ -26,11 +25,9 @@ export const updateJob = Cron(
           },
         },
       })
-      console.log("Refresh results", feeds)
       if (!feeds.length) {
         console.log("No feeds to refresh")
-        console.log('this', cron)
-        console.log('this.nextRun', cron.nextRun())
+        console.log(`Next run: ${cron.nextRun()}`)
         return
       }
       console.log(
@@ -43,6 +40,8 @@ export const updateJob = Cron(
         const xml = await response.text()
         const parsedFeed = await parser.parseString(xml)
         console.log(parsedFeed.items[0])
+
+        // @TODO: Actually diff and update the feed items
         // updateFeed(parsedFeed);
 
         await prisma.feed.update({
@@ -53,8 +52,8 @@ export const updateJob = Cron(
             lastFetched: new Date().toISOString(),
           },
         })
-        console.log('this', cron)
-        console.log('this.nextRun', cron.nextRun())
+        console.log('Feed updated')
+        console.log(`Next run: ${cron.nextRun()}`)
       }
     } catch (error) {
       console.error(error)
