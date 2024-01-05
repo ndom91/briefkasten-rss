@@ -14,12 +14,14 @@ fastify.register(queuePlugin)
 fastify.after(err => console.log('after queue', err))
 
 const start = async () => {
+  const port = process.env.PORT ? parseInt(process.env.PORT) : 8000
   try {
-    await fastify.listen({ port: 8000 });
+    await fastify.listen({ port });
     console.log('updateJob.isRunning', updateJob.isRunning())
+    console.log('updateJob.nextRun', updateJob.nextRun())
     console.log(`
-    🚀 Server ready at: http://localhost:3000
-    ⭐️ See sample requests: http://pris.ly/e/ts/rest-fastify#3-using-the-rest-api`);
+    🚀 Server ready at: http://localhost:${port}
+    `);
   } catch (err) {
     fastify.log.error(err);
     process.exit(1);

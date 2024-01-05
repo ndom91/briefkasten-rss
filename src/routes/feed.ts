@@ -1,6 +1,6 @@
 import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify'
 
-export function routes(fastify: FastifyInstance, options) {
+export async function routes(fastify: FastifyInstance, _options) {
   const feedBodySchema = {
     type: 'object',
     required: ['feedUrl', 'userId'],
