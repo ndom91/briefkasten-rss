@@ -52,12 +52,14 @@ export async function queueWorker(arg: Task): Promise<void> {
           feedMedia: {
             create: item.media?.map((media: Record<string, Record<string, unknown>>) => ({
               href: media['$'].url,
-              title: media['media:tite'],
-              description: media['media:description'],
-              credit: media['media:credit'],
+              title: media['media:tite']?.[0],
+              description: media['media:description']?.[0],
+              credit: media['media:credit']?.[0],
               medium: media['$'].medium,
-              height: media['$'].height,
-              width: media['$'].width,
+              // @ts-expect-error
+              height: media['$'].height ? parseInt(media['$'].height) : null,
+              // @ts-expect-error
+              width: media['$'].width ? parseInt(media['$'].width) : null,
               user: {
                 connect: {
                   id: arg.userId,

@@ -47,6 +47,7 @@ export const updateJob = Cron(
         const response = await fetch(feed.url)
         const xml = await response.text()
         const parsedFeed = await parser.parseString(xml)
+        console.log('Updating feed', parsedFeed.link)
         // @TODO: Actually diff and update the feed items
         // updateFeed(parsedFeed);
 

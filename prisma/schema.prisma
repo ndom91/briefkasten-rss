@@ -156,7 +156,6 @@ model FeedEntry {
   link            String
   content         String?
   contentSnippet  String?
-  language        String?
   author          String?
   ingested        DateTime?
   published       DateTime?
