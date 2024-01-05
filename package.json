@@ -1,0 +1,26 @@
+{
+  "name": "rest-express",
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "db:studio": "pnpm dlx prisma studio",
+    "db:generate": "pnpm dlx prisma generate"
+  },
+  "dependencies": {
+    "@prisma/client": "5.7.1",
+    "croner": "^8.0.0",
+    "fastify": "4.25.2",
+    "fastify-plugin": "^4.5.1",
+    "fastify-zod": "^1.4.0",
+    "fastq": "^1.16.0",
+    "rss-parser": "^3.13.0",
+    "zod-prisma-types": "^3.1.6"
+  },
+  "devDependencies": {
+    "@types/node": "20.10.6",
+    "prisma": "5.7.1",
+    "tsx": "^4.7.0",
+    "typescript": "5.3.3"
+  }
+}
