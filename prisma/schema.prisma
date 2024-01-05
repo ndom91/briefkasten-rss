@@ -168,6 +168,7 @@ model FeedEntry {
   createdAt       DateTime     @default(now())
   updatedAt       DateTime     @updatedAt
 
+  @@index([guid])
   @@index([userId])
   @@index([feedId])
 }
