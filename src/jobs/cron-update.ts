@@ -1,6 +1,7 @@
 import { Cron } from "croner";
-import { prisma } from "../plugin/db"
 import Parser from 'rss-parser';
+import { prisma } from "@plugin/db"
+import { updateFeed } from "@lib/update-feed"
 
 const parser = new Parser({
   defaultRSS: 2.0,
@@ -22,7 +23,7 @@ export const updateJob = Cron(
     interval: 60
   },
   async (cron: Cron) => {
-    console.log("Refreshing feeds")
+    console.log("[CRON]", "Refreshing feeds")
     try {
       const oneHourAgo = new Date()
       oneHourAgo.setHours(oneHourAgo.getHours() - 1)
@@ -34,23 +35,24 @@ export const updateJob = Cron(
         },
       })
       if (!feeds.length) {
-        console.log("No feeds to refresh")
-        console.log(`Next run: ${cron.nextRun()}`)
+        console.log("[CRON]", "No feeds to refresh")
+        console.log("[CRON]", `Next run: ${cron.nextRun()}`)
         return
       }
       console.log(
+        "[CRON]",
         `Found ${feeds.length} feeds to refresh`,
         feeds.map((f) => f.url),
       )
 
-      for (const feed of feeds) {
+      await Promise.all(feeds.map(async (feed) => {
         const response = await fetch(feed.url)
         const xml = await response.text()
         const parsedFeed = await parser.parseString(xml)
-        console.log('Updating feed', parsedFeed.link)
-        // @TODO: Actually diff and update the feed items
-        // updateFeed(parsedFeed);
+        console.log("[CRON]", 'Updating feed', parsedFeed.link)
+        await updateFeed(feed, parsedFeed);
 
+        // After successfully updating all new FeedEntry items, bump feed.lastFetched
         await prisma.feed.update({
           where: {
             id: feed.id,
@@ -59,10 +61,10 @@ export const updateJob = Cron(
             lastFetched: new Date().toISOString(),
           },
         })
-        console.log('Feed updated')
-        console.log(`Next run: ${cron.nextRun()}`)
-      }
+        console.log("[CRON]", 'Feed updated')
+        console.log("[CRON]", `Next run: ${cron.nextRun()}`)
+      }))
     } catch (error) {
-      console.error(error)
+      console.error("[CRON]", error)
     }
   });

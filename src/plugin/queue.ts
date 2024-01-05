@@ -1,6 +1,6 @@
 import * as fastq from "fastq";
 import type { queueAsPromised } from "fastq";
-import { queueWorker } from "./queueWorker"
+import { queueWorker } from "@plugin/queueWorker"
 import fp from "fastify-plugin"
 import type { FastifyPluginCallback, FastifyInstance, FastifyPluginOptions, HookHandlerDoneFunction } from 'fastify'
 

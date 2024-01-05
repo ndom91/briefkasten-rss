@@ -8,15 +8,24 @@
     ],
     "target": "esnext",
     "esModuleInterop": true,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "paths": {
+      "@types": [
+        "./src/lib/types/index.ts"
+      ],
+      "@routes/*": [
+        "./src/routes/*"
+      ],
+      "@jobs/*": [
+        "./src/jobs/*"
+      ],
+      "@plugin/*": [
+        "./src/plugin/*"
+      ],
+      "@lib/*": [
+        "./src/lib/*"
+      ]
+    }
   },
-  "baseUrl": ".",
-  "paths": {
-    "@/*": [
-      "src/*"
-    ],
-    "@/types": [
-      "src/lib/types/index.ts"
-    ]
-  }
 }

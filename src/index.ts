@@ -1,8 +1,8 @@
 import Fastify from "fastify";
-import { routes as feedRoutes } from "./routes/feed";
-import { updateJob } from "./jobs/cron-update"
-import prismaPlugin from "./plugin/db";
-import queuePlugin from "./plugin/queue";
+import { routes as feedRoutes } from "@routes/feed";
+import { updateJob } from "@jobs/cron-update"
+import prismaPlugin from "@plugin/db";
+import queuePlugin from "@plugin/queue";
 
 const fastify = Fastify({ logger: { level: 'warn' } });
 

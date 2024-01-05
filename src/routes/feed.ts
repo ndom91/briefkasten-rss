@@ -29,7 +29,6 @@ export async function routes(fastify: FastifyInstance, _options: FastifyPluginOp
         feedUrl,
         userId,
       });
-      console.log(`Enqueued feed - ${feedUrl}`);
       return { type: "success" };
     } catch (error) {
       console.log(error);

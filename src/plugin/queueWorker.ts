@@ -1,6 +1,6 @@
 import Parser from 'rss-parser';
-import type { Task } from "./queue"
-import { prisma } from "./db"
+import type { Task } from "@plugin/queue"
+import { prisma } from "@plugin/db"
 
 const parser = new Parser({
   defaultRSS: 2.0,
@@ -13,12 +13,10 @@ const parser = new Parser({
 });
 
 export async function queueWorker(arg: Task): Promise<void> {
-  console.log("queue.arg", arg)
   const response = await fetch(arg.feedUrl)
   const xml = await response.text()
   const feed = await parser.parseString(xml)
-  console.log('queue.parsedFeed', feed.link)
-  console.log(`Inserting ${arg.feedUrl}`)
+  console.log('[QUEUE.WORKER]', 'Inserting Feed:', feed.link)
 
   await prisma.feed.create({
     data: {
