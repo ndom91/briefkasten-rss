@@ -1,17 +1,6 @@
 import { Cron } from "croner";
-import Parser from 'rss-parser';
 import { prisma } from "@plugin/db"
 import { updateFeed } from "@lib/update-feed"
-
-const parser = new Parser({
-  defaultRSS: 2.0,
-  customFields: {
-    feed: ['language', 'copyright'],
-    item: [
-      ['media:content', 'media', { keepArray: true }],
-    ],
-  }
-});
 
 // Run every 10 min
 export const updateJob = Cron(
@@ -46,11 +35,8 @@ export const updateJob = Cron(
       )
 
       await Promise.all(feeds.map(async (feed) => {
-        const response = await fetch(feed.url)
-        const xml = await response.text()
-        const parsedFeed = await parser.parseString(xml)
-        console.log("[CRON]", 'Updating feed', parsedFeed.link)
-        await updateFeed(feed, parsedFeed);
+        console.log("[CRON]", 'Updating feed', feed.url)
+        await updateFeed(feed);
 
         // After successfully updating all new FeedEntry items, bump feed.lastFetched
         await prisma.feed.update({
