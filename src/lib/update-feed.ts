@@ -20,7 +20,7 @@ const updateFeed = async (feed: Feed) => {
   // const { items } = parsedFeed
 
   // Get GUIDs of all items parsed from feed
-  const itemGuids = items.map((item) => item.guid)
+  const itemGuids = items.map((item) => item.guid ?? "").filter(Boolean)
 
   // If no items in parsed feed, return
   if (!itemGuids.length) {
@@ -77,14 +77,14 @@ const updateFeed = async (feed: Feed) => {
           },
         },
         feedMedia: {
-          create: item.media?.map((media) => ({
+          create: item.media?.map((media: Record<string, Record<string, unknown>>) => ({
             href: media['$'].url,
             title: media['media:tite']?.[0],
             description: media['media:description']?.[0],
             credit: media['media:credit']?.[0],
             medium: media['$'].medium,
-            height: media['$'].height ? parseInt(media['$'].height) : null,
-            width: media['$'].width ? parseInt(media['$'].width) : null,
+            height: media['$'].height ? Number(media['$'].height) : null,
+            width: media['$'].width ? Number(media['$'].width) : null,
             user: {
               connect: {
                 id: feed.userId,

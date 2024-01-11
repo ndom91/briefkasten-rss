@@ -1,5 +1,5 @@
 import type { FastifyZod } from "fastify-zod";
-import { FeedSchema } from "./src/lib/types/index.ts";
+import { FeedSchema } from "./src/lib/types/index";
 
 const models = {
   FeedSchema,

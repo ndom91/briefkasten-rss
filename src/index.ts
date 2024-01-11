@@ -13,9 +13,9 @@ fastify.register(queuePlugin);
 (async function() {
   const port = process.env.PORT ? parseInt(process.env.PORT) : 8000
   try {
-    await fastify.listen({ port });
+    await fastify.listen({ port, host: '0.0.0.0' });
     console.log(`
-  🚀 Server ready at: http://localhost:${port}
+  🚀 Server ready at: http://0.0.0.0:${port}
   ⌛ Next cron run at: ${updateJob.nextRun()}
   `);
   } catch (err) {

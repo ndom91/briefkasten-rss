@@ -17,10 +17,13 @@
     "fastify-zod": "^1.4.0",
     "fastq": "^1.16.0",
     "rss-parser": "^3.13.0",
+    "zod": "^3.22.4",
     "zod-prisma-types": "^3.1.6"
   },
   "devDependencies": {
+    "@flydotio/dockerfile": "^0.5.0",
     "@types/node": "20.10.6",
+    "@types/xml2js": "^0.4.14",
     "prisma": "5.7.1",
     "tsx": "^4.7.0",
     "typescript": "5.3.3"
