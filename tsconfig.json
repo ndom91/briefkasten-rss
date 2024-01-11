@@ -1,4 +1,11 @@
 {
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ],
   "compilerOptions": {
     "sourceMap": false,
     "outDir": "dist",
@@ -8,8 +15,9 @@
       "esnext"
     ],
     "target": "esnext",
-    "esModuleInterop": true,
+    "module": "esnext",
     "moduleResolution": "node",
+    "esModuleInterop": true,
     "baseUrl": ".",
     "paths": {
       "@types": [
@@ -22,7 +30,7 @@
         "./src/jobs/*"
       ],
       "@plugin/*": [
-        "./src/plugin/*"
+        "./src/plugins/*"
       ],
       "@lib/*": [
         "./src/lib/*"

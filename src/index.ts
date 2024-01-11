@@ -1,14 +1,20 @@
 import Fastify from "fastify";
-import { routes as feedRoutes } from "@routes/feed";
 import { updateJob } from "@jobs/cron-update"
-import prismaPlugin from "@plugin/db";
-import queuePlugin from "@plugin/queue";
+import autoLoad from '@fastify/autoload'
+import { dirname, join } from 'path'
+import { fileURLToPath } from 'url'
+
 
 const fastify = Fastify({ logger: { level: 'warn' } });
+const _dirname = typeof __dirname === 'undefined' ? dirname(fileURLToPath(import.meta.url)) : __dirname
 
-fastify.register(feedRoutes);
-fastify.register(prismaPlugin);
-fastify.register(queuePlugin);
+fastify.register(autoLoad, {
+  dir: join(_dirname, 'routes'),
+})
+
+fastify.register(autoLoad, {
+  dir: join(_dirname, 'plugins'),
+});
 
 (async function() {
   const port = process.env.PORT ? parseInt(process.env.PORT) : 8000
