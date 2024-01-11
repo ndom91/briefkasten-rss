@@ -4,7 +4,7 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "build": "tsc",
+    "build": "SKIP_ZOD_PRISMA=true tsc",
     "dev": "tsx watch ./src/index.ts",
     "db:studio": "pnpm dlx prisma studio",
     "db:generate": "pnpm dlx prisma generate"
@@ -14,10 +14,9 @@
     "croner": "^8.0.0",
     "fastify": "4.25.2",
     "fastify-plugin": "^4.5.1",
-    "fastify-zod": "^1.4.0",
     "fastq": "^1.16.0",
     "rss-parser": "^3.13.0",
-    "zod": "^3.22.4",
+    "zod": "^3.21.1",
     "zod-prisma-types": "^3.1.6"
   },
   "devDependencies": {

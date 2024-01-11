@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
-    "sourceMap": true,
+    "sourceMap": false,
     "outDir": "dist",
     "strict": true,
+    "strictNullChecks": true,
     "lib": [
       "esnext"
     ],
