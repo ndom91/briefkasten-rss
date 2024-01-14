@@ -1,11 +1,11 @@
-import fastq from "fastq";
+import fastq from "fastq"
 import fp from "fastify-plugin"
 import { actions } from "@lib/constants"
 import { queueWorker } from "@jobs/queue-worker"
-import type { queueAsPromised } from "fastq";
-import type { FastifyPluginCallback, FastifyInstance, FastifyPluginOptions, HookHandlerDoneFunction } from 'fastify'
+import type { queueAsPromised } from "fastq"
+import type { FastifyPluginCallback, FastifyInstance, FastifyPluginOptions, HookHandlerDoneFunction } from "fastify"
 
-declare module 'fastify' {
+declare module "fastify" {
   interface FastifyInstance {
     queue: queueAsPromised<Task>
   }
@@ -20,21 +20,18 @@ const queue: queueAsPromised<Task> = fastq.promise(queueWorker, 1)
 
 function queuePlugin(fastify: FastifyInstance, _options: FastifyPluginOptions, done: HookHandlerDoneFunction) {
   if (!fastify.queue) {
-    fastify.decorate("queue", queue);
+    fastify.decorate("queue", queue)
 
     fastify.addHook("onClose", async () => {
       if (fastify.queue === queue) {
         await queue.kill()
       }
-    });
+    })
   }
 
-  done();
+  done()
 }
 
 const fastifyQueue: FastifyPluginCallback = fp(queuePlugin, { name: "fastify-queue" })
 
-export {
-  fastifyQueue as default,
-  queue
-}
+export { fastifyQueue as default, queue }

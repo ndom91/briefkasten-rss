@@ -1,15 +1,13 @@
 import { prisma } from "@plugin/db"
-import Parser from 'rss-parser';
+import Parser from "rss-parser"
 
 const parser = new Parser({
   defaultRSS: 2.0,
   customFields: {
-    feed: ['language', 'copyright'],
-    item: [
-      ['media:content', 'media', { keepArray: true }],
-    ],
-  }
-});
+    feed: ["language", "copyright"],
+    item: [["media:content", "media", { keepArray: true }]],
+  },
+})
 
 type CreateFeedData = {
   userId: string
@@ -20,7 +18,7 @@ export const createFeed = async (data: CreateFeedData) => {
   const response = await fetch(data.feedUrl)
   const xml = await response.text()
   const feed = await parser.parseString(xml)
-  console.log('[QUEUE.WORKER]', 'Inserting Feed:', feed.link)
+  console.log("[QUEUE.WORKER]", "Inserting Feed:", feed.link)
 
   await prisma.feed.create({
     data: {
@@ -55,7 +53,10 @@ export const createFeed = async (data: CreateFeedData) => {
             contentSnippet: item.contentSnippet,
             ingested: new Date().toISOString(),
             published: item.isoDate ? item.isoDate : item.pubDate ? new Date(item.pubDate) : null,
-            categories: item.categories?.map((c: string) => c.replaceAll('\n', '').trim()).filter((c: string) => !c.includes('|')).filter(Boolean),
+            categories: item.categories
+              ?.map((c: string) => c.replaceAll("\n", "").trim())
+              .filter((c: string) => !c.includes("|"))
+              .filter(Boolean),
             user: {
               connect: {
                 id: data.userId,
@@ -63,15 +64,15 @@ export const createFeed = async (data: CreateFeedData) => {
             },
             feedMedia: {
               create: item.media?.map((media: Record<string, Record<string, unknown>>) => ({
-                href: media['$'].url,
-                title: media['media:tite']?.[0],
-                description: media['media:description']?.[0],
-                credit: media['media:credit']?.[0],
-                medium: media['$'].medium,
+                href: media["$"].url,
+                title: media["media:tite"]?.[0],
+                description: media["media:description"]?.[0],
+                credit: media["media:credit"]?.[0],
+                medium: media["$"].medium,
                 // @ts-expect-error
-                height: media['$'].height ? parseInt(media['$'].height) : null,
+                height: media["$"].height ? parseInt(media["$"].height) : null,
                 // @ts-expect-error
-                width: media['$'].width ? parseInt(media['$'].width) : null,
+                width: media["$"].width ? parseInt(media["$"].width) : null,
                 user: {
                   connect: {
                     id: data.userId,
@@ -83,5 +84,5 @@ export const createFeed = async (data: CreateFeedData) => {
       },
     },
   })
-  console.log('[QUEUE.WORKER]', 'Feed Create Success', feed.link)
+  console.log("[QUEUE.WORKER]", "Feed Create Success", feed.link)
 }
