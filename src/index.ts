@@ -45,7 +45,7 @@ fastify.get("/", (_req: FastifyRequest, reply: FastifyReply) => {
             <ol>
             <li>Sign in at <a href="/api/auth/signin">/api/auth/signin</a> </li>
             <li>Sign out at <a href="/api/auth/signout">/api/auth/signout</a> </li>
-            <li>Access the current user at <a href="/api/users/me">/api/users/me</a> </li>
+            <li>Access the current user at <a href="/v1/users/me">/api/users/me</a> </li>
             </ol>
         `,
   )

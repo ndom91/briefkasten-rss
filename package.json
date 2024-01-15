@@ -17,7 +17,6 @@
   "dependencies": {
     "@auth/core": "^0.20.0",
     "@auth/fastify": "file:///opt/nextauthjs/next-auth/packages/frameworks-fastify/",
-    "@fastify/autoload": "^5.8.0",
     "@fastify/formbody": "^7.4.0",
     "@fastify/http-proxy": "^9.3.0",
     "@fastify/sensible": "^5.5.0",
@@ -31,7 +30,6 @@
     "zod-prisma-types": "^3.1.6"
   },
   "devDependencies": {
-    "@flydotio/dockerfile": "^0.5.0",
     "@types/node": "20.10.6",
     "@types/xml2js": "^0.4.14",
     "@typescript-eslint/eslint-plugin": "^6.18.1",
@@ -63,6 +61,6 @@
   "prettier": {
     "semi": false,
     "singleQuote": false,
-    "printWidth": 120
+    "printWidth": 100
   }
 }
