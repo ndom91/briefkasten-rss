@@ -1,40 +1,15 @@
 {
-  "include": [
-    "src/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist"
-  ],
   "compilerOptions": {
-    "sourceMap": false,
     "outDir": "dist",
     "strict": true,
-    "strictNullChecks": true,
     "lib": [
-      "esnext"
+      "esnext",
+      "dom"
     ],
-    "target": "esnext",
+    "target": "ESNext",
     "module": "esnext",
+    "typeRoots": ["src/types"],
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "baseUrl": ".",
-    "paths": {
-      "@types": [
-        "./src/lib/types/index.ts"
-      ],
-      "@routes/*": [
-        "./src/routes/*"
-      ],
-      "@jobs/*": [
-        "./src/jobs/*"
-      ],
-      "@plugin/*": [
-        "./src/plugins/*"
-      ],
-      "@lib/*": [
-        "./src/lib/*"
-      ]
-    }
   },
 }

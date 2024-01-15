@@ -1,7 +1,7 @@
 import fastq from "fastq"
 import fp from "fastify-plugin"
-import { actions } from "@lib/constants"
-import { queueWorker } from "@jobs/queue-worker"
+import { actions } from "../lib/constants"
+import { queueWorker } from "../jobs/queue-worker"
 import type { queueAsPromised } from "fastq"
 import type { FastifyPluginCallback, FastifyInstance, FastifyPluginOptions, HookHandlerDoneFunction } from "fastify"
 

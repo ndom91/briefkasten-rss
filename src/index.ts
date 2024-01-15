@@ -1,15 +1,12 @@
 import Fastify from "fastify"
-import { dirname, join } from "path"
-import { fileURLToPath } from "url"
-import { updateJob } from "@jobs/cron-update"
-import autoLoad from "@fastify/autoload"
+import { updateJob } from "./jobs/cron-update"
 import formbodyParser from "@fastify/formbody"
+import GitHub from "@auth/fastify/providers/github"
+import { FastifyAuth, getSession } from "@auth/fastify"
+import type { FastifyReply, FastifyRequest } from "fastify"
 // import httpProxy from "@fastify/http-proxy"
-import GitHub from "@plugin/auth/github"
-import { FastifyAuth } from "@plugin/auth"
 
 const fastify = Fastify({ logger: { level: "warn" } })
-const _dirname = dirname(fileURLToPath(import.meta.url))
 
 // Make sure to use a form body parser so Auth.js can receive data from the client
 fastify.register(formbodyParser)
@@ -20,25 +17,48 @@ fastify.register(formbodyParser)
 //   http2: false, // Set to true if your upstream supports http2
 // })
 
-fastify.register(
-  FastifyAuth({
-    providers: [
-      GitHub({
-        clientId: process.env.GITHUB_ID,
-        clientSecret: process.env.GITHUB_SECRET,
-      }),
-    ],
-  }),
-  { prefix: "/api/auth" },
-)
+const config = {
+  providers: [
+    GitHub({
+      clientId: process.env.GITHUB_ID,
+      clientSecret: process.env.GITHUB_SECRET,
+    }),
+  ],
+}
 
-fastify.register(autoLoad, {
-  dir: join(_dirname, "routes"),
+fastify.decorate("authenticate", async (req: FastifyRequest, reply: FastifyReply) => {
+  const session = await getSession(req, config)
+  if (!session) {
+    reply.status(403).send("Unauthorized")
+    return
+  }
+  if (session.user) {
+    reply.user = session.user
+  }
 })
 
-fastify.register(autoLoad, {
-  dir: join(_dirname, "plugins"),
+// TODO: rm after testing
+fastify.get("/", (_req: FastifyRequest, reply: FastifyReply) => {
+  reply.type("text/html").send(
+    `
+            <h1>Welcome to Auth.js + Fastify Demo!</h1>
+            <ol>
+            <li>Sign in at <a href="/api/auth/signin">/api/auth/signin</a> </li>
+            <li>Sign out at <a href="/api/auth/signout">/api/auth/signout</a> </li>
+            <li>Access the current user at <a href="/api/users/me">/api/users/me</a> </li>
+            </ol>
+        `,
+  )
 })
+
+fastify.register(FastifyAuth(config), { prefix: "/api/auth" })
+
+fastify.register(import("./routes/v1/feed"), { prefix: "/v1/feed" })
+fastify.register(import("./routes/v1/users"), { prefix: "/v1/users" })
+
+fastify.register(import("./plugins/queue"))
+fastify.register(import("./plugins/db"))
+fastify.register(import("./plugins/sensible"))
 ;(async function () {
   const port = process.env.PORT ? parseInt(process.env.PORT) : 8000
   try {

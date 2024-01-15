@@ -1,5 +1,5 @@
 import type { RouteHandler, FastifyRequest, FastifyReply } from "fastify"
-import { actions } from "@lib/constants"
+import { actions } from "./../../../lib/constants"
 
 export const getQueueHandler: RouteHandler = async function (request: FastifyRequest, reply: FastifyReply) {
   const queue = request.server.queue.getQueue()

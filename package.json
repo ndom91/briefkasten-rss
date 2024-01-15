@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@auth/core": "^0.20.0",
+    "@auth/fastify": "file:///opt/nextauthjs/next-auth/packages/frameworks-fastify/",
     "@fastify/autoload": "^5.8.0",
     "@fastify/formbody": "^7.4.0",
     "@fastify/http-proxy": "^9.3.0",

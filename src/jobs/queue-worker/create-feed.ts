@@ -1,4 +1,4 @@
-import { prisma } from "@plugin/db"
+import { prisma } from "../../plugins/db"
 import Parser from "rss-parser"
 
 const parser = new Parser({

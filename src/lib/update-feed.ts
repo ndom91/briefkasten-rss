@@ -1,6 +1,6 @@
-import { prisma } from "@plugin/db"
+import { prisma } from "../plugins/db"
 import Parser from "rss-parser"
-import type { Feed } from "@types"
+import type { Feed } from "./types"
 
 const parser = new Parser({
   defaultRSS: 2.0,

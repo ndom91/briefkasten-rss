@@ -1,5 +1,5 @@
-import type { Task } from "@plugin/queue"
-import { actions } from "@lib/constants"
+import type { Task } from "../../plugins/queue"
+import { actions } from "../../lib/constants"
 import { createFeed } from "./create-feed"
 import { createScreenshot } from "./create-screenshot"
 
