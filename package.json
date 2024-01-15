@@ -2,12 +2,12 @@
   "name": "sveltekasten-rss",
   "version": "0.0.1",
   "license": "MIT",
-  "main": "build/index.js",
+  "type": "module",
   "author": "ndom91 <yo@ndo.dev>",
   "scripts": {
     "build": "rm -rf build && node esbuild.mjs",
     "start": "pnpm run build && node build",
-    "dev": "tsx watch src",
+    "dev": "tsx watch ./src/index",
     "db:studio": "pnpm dlx prisma studio",
     "db:generate": "pnpm dlx prisma generate",
     "format": "prettier --write src",
@@ -15,7 +15,10 @@
     "ci": "pnpm format && pnpm lint"
   },
   "dependencies": {
+    "@auth/core": "^0.20.0",
     "@fastify/autoload": "^5.8.0",
+    "@fastify/formbody": "^7.4.0",
+    "@fastify/http-proxy": "^9.3.0",
     "@fastify/sensible": "^5.5.0",
     "@prisma/client": "5.7.1",
     "croner": "^8.0.0",

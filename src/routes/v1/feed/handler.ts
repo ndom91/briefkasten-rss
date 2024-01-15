@@ -8,6 +8,7 @@ export const getQueueHandler: RouteHandler = async function (request: FastifyReq
 }
 
 export const postFeedToQueuehandler = async function (request: FastifyRequest, reply: FastifyReply) {
+  console.log("req", request)
   try {
     // @ts-expect-error body not typed correctly
     const { feedUrl, userId } = request.body
