@@ -59,6 +59,13 @@ fastify.register(import("./routes/v1/users"), { prefix: "/v1/users" })
 fastify.register(import("./plugins/queue"))
 fastify.register(import("./plugins/db"))
 fastify.register(import("./plugins/sensible"))
+
+async function closeGracefully(signal: NodeJS.Signals) {
+  await fastify.close()
+  process.kill(process.pid, signal)
+}
+
+process.on("SIGINT", closeGracefully)
 ;(async function () {
   const port = process.env.PORT ? parseInt(process.env.PORT) : 8000
   try {
@@ -69,6 +76,7 @@ fastify.register(import("./plugins/sensible"))
   `)
   } catch (err) {
     fastify.log.error(err)
+    fastify.close()
     process.exit(1)
   }
 })()
