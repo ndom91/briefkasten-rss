@@ -16,18 +16,20 @@
   },
   "dependencies": {
     "@fastify/autoload": "^5.8.0",
+    "@fastify/cookie": "^9.3.1",
     "@fastify/sensible": "^5.5.0",
+    "@panva/hkdf": "^1.1.1",
     "@prisma/client": "5.7.1",
     "croner": "^8.0.0",
     "fastify": "4.25.2",
     "fastify-plugin": "^4.5.1",
     "fastq": "^1.16.0",
+    "jose": "^5.2.0",
     "rss-parser": "^3.13.0",
     "zod": "^3.21.1",
     "zod-prisma-types": "^3.1.6"
   },
   "devDependencies": {
-    "@flydotio/dockerfile": "^0.5.0",
     "@types/node": "20.10.6",
     "@types/xml2js": "^0.4.14",
     "@typescript-eslint/eslint-plugin": "^6.18.1",

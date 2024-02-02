@@ -16,6 +16,10 @@ fastify.register(autoLoad, {
 })
 
 ;(async function () {
+  if (!process.env.JWT_SECRET) {
+    console.error("JWT_SECRET not set")
+    return
+  }
   const port = process.env.PORT ? parseInt(process.env.PORT) : 8000
   try {
     await fastify.listen({ port, host: "0.0.0.0" })

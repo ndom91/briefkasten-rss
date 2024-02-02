@@ -1,5 +1,6 @@
 import type { RouteHandler, FastifyRequest, FastifyReply } from "fastify"
 import { actions } from "@lib/constants"
+import { decode } from "@lib/jwt"
 
 export const getQueueHandler: RouteHandler = async function (request: FastifyRequest, reply: FastifyReply) {
   const queue = request.server.queue.getQueue()
@@ -8,18 +9,35 @@ export const getQueueHandler: RouteHandler = async function (request: FastifyReq
 }
 
 export const postFeedToQueuehandler = async function (request: FastifyRequest, reply: FastifyReply) {
+  let token
+  if (request.headers.authorization) {
+    token = request.headers.authorization.split("Bearer ")[1]
+  } else if (request.cookies["authjs.session-token"]) {
+    token = request.cookies["authjs.session-token"]
+  }
+
+  const payload = await decode({
+    token,
+    secret: process.env.JWT_SECRET!,
+    salt: "authjs.session-token",
+  })
+
+  // Unable to decode JWT
+  if (!payload?.sub) {
+    throw request.server.httpErrors.unauthorized()
+  }
+
   try {
     // @ts-expect-error body not typed correctly
-    const { feedUrl, userId } = request.body
-    if (!feedUrl || !userId) {
+    const { feedUrl } = request.body
+    if (!feedUrl || !payload?.sub) {
       throw reply.badRequest("feedUrl and userId required")
     }
     await request.server.queue.push({
-      // @ts-expect-error action not typed correctly
       action: actions.ADD_FEED,
       data: {
         feedUrl,
-        userId,
+        userId: payload?.sub,
       },
     })
     return reply.send("ok")
