@@ -23,33 +23,18 @@ export interface DefaultJWT extends Record<string, unknown> {
   exp?: number
   jti?: string
 }
-/**
- * Returned by the `jwt` callback and `getToken`, when using JWT sessions
- *
- * [`jwt` callback](https://next-auth.js.org/configuration/callbacks#jwt-callback) | [`getToken`](https://next-auth.js.org/tutorials/securing-pages-and-api-routes#using-gettoken)
- */
+
 interface JWT extends Record<string, unknown>, DefaultJWT {}
 
 interface JWTEncodeParams<Payload = JWT> {
-  /**
-   * The maximum age of the Auth.js issued JWT in seconds.
-   *
-   * @default 30 * 24 * 60 * 60 // 30 days
-   */
   maxAge?: number
-  /** Used in combination with `secret`, to derive the encryption secret for JWTs. */
   salt: string
-  /** Used in combination with `salt`, to derive the encryption secret for JWTs. */
   secret: string
-  /** The JWT payload. */
   token?: Payload
 }
 
 interface JWTDecodeParams {
-  /** Used in combination with `secret`, to derive the encryption secret for JWTs. */
   salt: string
-  /** Used in combination with `salt`, to derive the encryption secret for JWTs. */
   secret: string
-  /** The Auth.js issued JWT to be decoded */
   token?: string
 }
